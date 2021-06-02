@@ -66,3 +66,5 @@ genfscon sysfs /devices/platform/soc/a8c000.i2c/i2c-2/2-0065/power_supply/bq2597
 
 genfscon proc /last_kmsg u:object_r:proc_last_kmsg:s0
 
+# Touchpanel
+genfscon sysfs /touchpanel                                                           u:object_r:sysfs_touchpanel:s0
