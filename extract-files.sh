@@ -71,6 +71,10 @@ function blob_fixup() {
             grep -q "libvendor.goodix.hardware.biometrics.fingerprint@2.1.so" "${2}" && ${PATCHELF_0_17_2} --replace-needed "libvendor.goodix.hardware.biometrics.fingerprint@2.1.so" "vendor.goodix.hardware.biometrics.fingerprint@2.1.so" "${2}"
             ;;
 
+	vendor/lib64/android.hardware.camera.provider@2.4-legacy.so)
+            grep -q "libcamera_provider_shim.so" "${2}" || "${PATCHELF}" --add-needed "libcamera_provider_shim.so" "${2}"
+            ;;
+
     esac
 }
 
