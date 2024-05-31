@@ -28,12 +28,20 @@ source "${HELPER}"
 CLEAN_VENDOR=true
 
 KANG=
+ONLY_FIRMWARE=
+ONLY_TARGET=
 SECTION=
 
 while [ "${#}" -gt 0 ]; do
     case "${1}" in
         -n | --no-cleanup )
                 CLEAN_VENDOR=false
+                ;;
+        --only-firmware )
+                ONLY_FIRMWARE=true
+                ;;
+        --only-target )
+                ONLY_TARGET=true
                 ;;
         -k | --kang )
                 KANG="--kang"
@@ -63,12 +71,22 @@ function blob_fixup() {
             grep -q "libvendor.goodix.hardware.biometrics.fingerprint@2.1.so" "${2}" && ${PATCHELF_0_17_2} --replace-needed "libvendor.goodix.hardware.biometrics.fingerprint@2.1.so" "vendor.goodix.hardware.biometrics.fingerprint@2.1.so" "${2}"
             ;;
 
+	vendor/lib64/android.hardware.camera.provider@2.4-legacy.so)
+            grep -q "libcamera_provider_shim.so" "${2}" || "${PATCHELF}" --add-needed "libcamera_provider_shim.so" "${2}"
+            ;;
+
     esac
 }
 
 # Initialize the helper
 setup_vendor "${DEVICE}" "${VENDOR}" "${ANDROID_ROOT}" false "${CLEAN_VENDOR}"
 
-extract "${MY_DIR}/proprietary-files.txt" "${SRC}" "${KANG}" --section "${SECTION}"
+if [ -z "${ONLY_FIRMWARE}" ]; then
+	extract "${MY_DIR}/proprietary-files.txt" "${SRC}" "${KANG}" --section "${SECTION}"
+fi
+
+if [ -z "${ONLY_TARGET}" ]; then
+	extract_firmware "${MY_DIR}/proprietary-firmware.txt" "${SRC}"
+fi
 
 "${MY_DIR}/setup-makefiles.sh"
