@@ -17,7 +17,3 @@
 PRODUCT_MAKEFILES := \
     $(LOCAL_DIR)/lmodroid_surya.mk
 
-COMMON_LUNCH_CHOICES := \
-    lmodroid_surya-user \
-    lmodroid_surya-userdebug \
-    lmodroid_surya-eng
