@@ -57,6 +57,8 @@ blob_fixups: blob_fixups_user_type = {
         ),
     'vendor/lib64/android.hardware.camera.provider@2.4-legacy.so': blob_fixup()
         .add_needed("libcamera_provider_shim.so"),
+    ('vendor/lib64/mediadrm/libwvdrmengine.so', 'vendor/lib64/libwvhidl.so'): blob_fixup()
+        .add_needed("libcrypto_shim.so"),
 }  # fmt: skip
 
 module = ExtractUtilsModule(
